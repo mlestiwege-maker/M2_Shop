@@ -1,3 +1,5 @@
+import '../config/api_config.dart';
+
 class Product {
   final int id;
   final String name;
@@ -22,7 +24,7 @@ class Product {
 
     final imageUrl = isFullUrl
         ? rawImageUrl
-        : 'http://172.16.4.242:5000/$rawImageUrl';
+      : '${ApiConfig.imageBaseUrl}/$rawImageUrl';
 
     // Convert _id to int (if it's not an int, fallback to 0)
     int parsedId = 0;

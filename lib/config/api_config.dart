@@ -1,24 +1,52 @@
+import 'package:flutter/foundation.dart';
+
 /// API configuration for M2 Shop
 /// This should be updated based on deployment environment
 class ApiConfig {
+  static String get _defaultApiBaseUrl {
+    if (kIsWeb) {
+      return 'http://localhost:5000/api';
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return 'http://10.0.2.2:5000/api';
+    }
+
+    return 'http://localhost:5000/api';
+  }
+
   /// Base API URL - configure based on environment
   /// - Development: http://localhost:5000/api
-  /// - Production: https://your-api-domain.com/api
-  static const String baseUrl = 'http://localhost:5000/api';
+  /// - Android emulator: http://10.0.2.2:5000/api
+  /// - Physical device: http://<your-local-ip>:5000/api
+  ///
+  /// You can override at build/run time:
+  /// --dart-define=API_BASE_URL=http://<host>:5000/api
+  static String get baseUrl {
+    const envBaseUrl = String.fromEnvironment('API_BASE_URL');
+    return envBaseUrl.isNotEmpty ? envBaseUrl : _defaultApiBaseUrl;
+  }
 
   /// Request timeout duration in seconds
   static const int requestTimeoutSeconds = 30;
 
   /// Supported API endpoints
-  static const String authEndpoint = '$baseUrl/auth';
-  static const String productsEndpoint = '$baseUrl/products';
-  static const String commentsEndpoint = '$baseUrl/comments';
-  static const String complaintsEndpoint = '$baseUrl/complaints';
-  static const String userEndpoint = '$baseUrl/user';
+  static String get authEndpoint => '$baseUrl/auth';
+  static String get productsEndpoint => '$baseUrl/products';
+  static String get commentsEndpoint => '$baseUrl/comments';
+  static String get complaintsEndpoint => '$baseUrl/complaints';
+  static String get userEndpoint => '$baseUrl/user';
 
   /// File upload endpoint for images
-  static const String uploadEndpoint = '$baseUrl/upload';
+  static String get uploadEndpoint => '$baseUrl/upload';
 
   /// Image serving baseURL
-  static const String imageBaseUrl = 'http://localhost:5000/uploads';
+  /// You can override at build/run time:
+  /// --dart-define=IMAGE_BASE_URL=http://<host>:5000/uploads
+  static String get imageBaseUrl {
+    const envImageBaseUrl = String.fromEnvironment('IMAGE_BASE_URL');
+    if (envImageBaseUrl.isNotEmpty) return envImageBaseUrl;
+
+    return baseUrl.replaceFirst('/api', '/uploads');
+  }
 }
