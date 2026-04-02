@@ -270,4 +270,4 @@ For issues, questions, or contributions, please open an issue on GitHub.
 
 ---
 
-**Made with ❤️ by the M2 Shop Team**
+**Made with ❤️ by the Mufutumari Lestiwege**
