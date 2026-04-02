@@ -44,19 +44,21 @@ class CheckoutScreen extends StatelessWidget {
                       itemCount: cart.items.length,
                       itemBuilder: (context, index) {
                         final item = cart.items.values.toList()[index];
+                        final product = item['product'];
+                        final quantity = item['quantity'] as int;
                         return ListTile(
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                           title: Text(
-                            item.product.name,
+                            product.name,
                             style: const TextStyle(color: Colors.white, fontSize: 16),
                           ),
                           subtitle: Text(
-                            '${item.quantity} x \$${item.product.price.toStringAsFixed(2)}',
+                            '$quantity x \$${product.price.toStringAsFixed(2)}',
                             style: const TextStyle(color: Colors.tealAccent),
                           ),
                           trailing: Text(
-                            '\$${(item.product.price * item.quantity).toStringAsFixed(2)}',
+                            '\$${(product.price * quantity).toStringAsFixed(2)}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,

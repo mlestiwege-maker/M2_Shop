@@ -1,5 +1,8 @@
 // lib/screens/main_screen.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import 'login_screen.dart';
 import 'home_screen.dart';
 import 'profile_screen.dart';
 import 'cart_screen.dart';
@@ -28,6 +31,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -48,7 +53,17 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Colors.deepPurpleAccent,
         unselectedItemColor: Colors.white70,
         showUnselectedLabels: true,
-        onTap: (index) => setState(() => _currentIndex = index),
+        onTap: (index) {
+          // Profile is protected for authenticated users.
+          if (index == 2 && !auth.isAuthenticated) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+            );
+            return;
+          }
+          setState(() => _currentIndex = index);
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

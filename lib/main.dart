@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
                 prefixIconColor: Colors.white70,
               ),
             ),
-            home: auth.isAuthenticated ? const MainScreen() : const LoginScreen(),
+            // Professional guest-first flow:
+            // let users browse first, then authenticate when needed.
+            home: const MainScreen(),
             routes: {
               '/login': (_) => const LoginScreen(),
               '/register': (_) => const RegisterScreen(),

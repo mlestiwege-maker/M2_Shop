@@ -27,9 +27,6 @@ State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-late Future<List<Product>> _productsFuture;
-
 List<Product> _allProducts = [];
 
 List<Product> _displayedProducts = [];
@@ -46,13 +43,17 @@ void initState() {
 
 super.initState();
 
-_productsFuture = ApiService.fetchProducts().then((products) {
+ApiService.fetchProducts().then((products) {
 
-  _allProducts = products;
+  if (!mounted) return;
 
-  _displayedProducts = List.from(_allProducts);
+  setState(() {
 
-  return products;
+    _allProducts = products;
+
+    _displayedProducts = List.from(_allProducts);
+
+  });
 
 });
 
@@ -94,7 +95,7 @@ setState(() {
 
 Widget build(BuildContext context) {
 
-final auth = Provider.of<AuthProvider>(context, listen: false);
+final auth = Provider.of<AuthProvider>(context);
 
 
 
@@ -182,85 +183,85 @@ return Scaffold(
 
       ),
 
-      IconButton(
+      auth.isAuthenticated
+          ? IconButton(
 
-        icon: const Icon(Icons.logout, color: Colors.white),
+              icon: const Icon(Icons.logout, color: Colors.white),
 
-        tooltip: 'Logout',
+              tooltip: 'Logout',
 
-        onPressed: () async {
+              onPressed: () async {
 
-          final confirm = await showDialog<bool>(
+                final confirm = await showDialog<bool>(
 
-            context: context,
+                  context: context,
 
-            builder: (_) => AlertDialog(
+                  builder: (_) => AlertDialog(
 
-              backgroundColor: Colors.grey[850],
+                    backgroundColor: Colors.grey[850],
 
-              title: const Text(
+                    title: const Text(
 
-                'Logout',
+                      'Logout',
 
-                style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white),
 
-              ),
+                    ),
 
-              content: const Text(
+                    content: const Text(
 
-                'Are you sure you want to log out of M2 Shop?',
+                      'Are you sure you want to log out of M2 Shop?',
 
-                style: TextStyle(color: Colors.white70),
+                      style: TextStyle(color: Colors.white70),
 
-              ),
+                    ),
 
-              actions: [
+                    actions: [
 
-                TextButton(
+                      TextButton(
 
-                  onPressed: () => Navigator.pop(context, false),
+                        onPressed: () => Navigator.pop(context, false),
 
-                  child: const Text('Cancel'),
+                        child: const Text('Cancel'),
 
-                ),
+                      ),
 
-                ElevatedButton(
+                      ElevatedButton(
 
-                  onPressed: () => Navigator.pop(context, true),
+                        onPressed: () => Navigator.pop(context, true),
 
-                  child: const Text('Logout'),
+                        child: const Text('Logout'),
 
-                ),
+                      ),
 
-              ],
+                    ],
 
+                  ),
+
+                );
+
+                if (!(confirm ?? false) || !context.mounted) return;
+
+                await auth.logout();
+
+                if (!context.mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('You are now browsing as guest.')),
+                );
+              },
+
+            )
+          : IconButton(
+              icon: const Icon(Icons.login, color: Colors.white),
+              tooltip: 'Login',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                );
+              },
             ),
-
-          );
-
-
-
-          if (confirm ?? false) {
-
-            await auth.logout();
-
-            if (mounted) {
-
-              Navigator.pushReplacement(
-
-                context,
-
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
-
-              );
-
-            }
-
-          }
-
-        },
-
-      ),
 
     ],
 

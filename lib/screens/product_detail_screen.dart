@@ -71,7 +71,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                   // Product description
                   Text(
-                    widget.product.description ?? 'No description available.',
+                    widget.product.description.isNotEmpty
+                        ? widget.product.description
+                        : 'No description available.',
                     style: const TextStyle(color: Colors.white70, fontSize: 16),
                   ),
                   const SizedBox(height: 20),
