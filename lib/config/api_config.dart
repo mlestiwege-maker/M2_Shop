@@ -9,7 +9,12 @@ class ApiConfig {
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return 'http://10.0.2.2:5000/api';
+      // Prefer localhost for Android physical devices when using:
+      // adb reverse tcp:5000 tcp:5000
+      //
+      // If you're on an Android emulator, override with:
+      // --dart-define=API_BASE_URL=http://10.0.2.2:5000/api
+      return 'http://localhost:5000/api';
     }
 
     return 'http://localhost:5000/api';
@@ -17,11 +22,12 @@ class ApiConfig {
 
   /// Base API URL - configure based on environment
   /// - Development: http://localhost:5000/api
+  /// - Android physical device (with adb reverse): http://localhost:5000/api
   /// - Android emulator: http://10.0.2.2:5000/api
-  /// - Physical device: http://<your-local-ip>:5000/api
+  /// - Physical device via LAN: http://your-local-ip:5000/api
   ///
   /// You can override at build/run time:
-  /// --dart-define=API_BASE_URL=http://<host>:5000/api
+  /// --dart-define=API_BASE_URL=http://your-host:5000/api
   static String get baseUrl {
     const envBaseUrl = String.fromEnvironment('API_BASE_URL');
     return envBaseUrl.isNotEmpty ? envBaseUrl : _defaultApiBaseUrl;
@@ -42,7 +48,7 @@ class ApiConfig {
 
   /// Image serving baseURL
   /// You can override at build/run time:
-  /// --dart-define=IMAGE_BASE_URL=http://<host>:5000/uploads
+  /// --dart-define=IMAGE_BASE_URL=http://your-host:5000/uploads
   static String get imageBaseUrl {
     const envImageBaseUrl = String.fromEnvironment('IMAGE_BASE_URL');
     if (envImageBaseUrl.isNotEmpty) return envImageBaseUrl;

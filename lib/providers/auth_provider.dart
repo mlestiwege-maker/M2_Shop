@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 import 'dart:convert';
 import '../config/api_config.dart';
 
@@ -79,7 +80,12 @@ class AuthProvider with ChangeNotifier {
         throw Exception(errorData['error'] ?? 'Registration failed');
       }
     } catch (e) {
-      _errorMessage = 'Registration failed: ${e.toString()}';
+      if (e is TimeoutException) {
+        _errorMessage =
+            'Registration timed out. Ensure backend is running at ${ApiConfig.baseUrl}.';
+      } else {
+        _errorMessage = 'Registration failed: ${e.toString()}';
+      }
       debugPrint('❌ Register error: $_errorMessage');
       notifyListeners();
       return false;
@@ -126,7 +132,12 @@ class AuthProvider with ChangeNotifier {
         throw Exception(errorData['error'] ?? 'Login failed');
       }
     } catch (e) {
-      _errorMessage = 'Login failed: ${e.toString()}';
+      if (e is TimeoutException) {
+        _errorMessage =
+            'Login timed out. Keep backend running and verify API URL: ${ApiConfig.baseUrl}';
+      } else {
+        _errorMessage = 'Login failed: ${e.toString()}';
+      }
       debugPrint('❌ Login error: $_errorMessage');
       notifyListeners();
       return false;
