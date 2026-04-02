@@ -173,4 +173,123 @@ class ApiService {
       return false;
     }
   }
+
+  static Future<List<Map<String, dynamic>>> fetchSuppliers() async {
+    try {
+      final response = await _client
+          .get(Uri.parse(ApiConfig.suppliersEndpoint))
+          .timeout(Duration(seconds: ApiConfig.requestTimeoutSeconds));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => Map<String, dynamic>.from(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      debugPrint('⚠️ Error fetching suppliers: $e');
+      return [];
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> fetchRfqs() async {
+    try {
+      final response = await _client
+          .get(Uri.parse(ApiConfig.rfqEndpoint))
+          .timeout(Duration(seconds: ApiConfig.requestTimeoutSeconds));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => Map<String, dynamic>.from(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      debugPrint('⚠️ Error fetching RFQs: $e');
+      return [];
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> fetchOrders() async {
+    try {
+      final response = await _client
+          .get(Uri.parse(ApiConfig.ordersEndpoint))
+          .timeout(Duration(seconds: ApiConfig.requestTimeoutSeconds));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => Map<String, dynamic>.from(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      debugPrint('⚠️ Error fetching orders: $e');
+      return [];
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> fetchMessages() async {
+    try {
+      final response = await _client
+          .get(Uri.parse(ApiConfig.messagesEndpoint))
+          .timeout(Duration(seconds: ApiConfig.requestTimeoutSeconds));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => Map<String, dynamic>.from(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      debugPrint('⚠️ Error fetching messages: $e');
+      return [];
+    }
+  }
+
+  static Future<bool> submitContact(Map<String, dynamic> payload) async {
+    try {
+      final response = await _client
+          .post(
+            Uri.parse(ApiConfig.contactEndpoint),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(payload),
+          )
+          .timeout(Duration(seconds: ApiConfig.requestTimeoutSeconds));
+
+      return response.statusCode == 201;
+    } catch (e) {
+      debugPrint('⚠️ Error submitting contact form: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> submitRfq(Map<String, dynamic> payload) async {
+    try {
+      final response = await _client
+          .post(
+            Uri.parse(ApiConfig.rfqEndpoint),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(payload),
+          )
+          .timeout(Duration(seconds: ApiConfig.requestTimeoutSeconds));
+
+      return response.statusCode == 201;
+    } catch (e) {
+      debugPrint('⚠️ Error submitting RFQ: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> sendMessage(Map<String, dynamic> payload) async {
+    try {
+      final response = await _client
+          .post(
+            Uri.parse(ApiConfig.messagesEndpoint),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(payload),
+          )
+          .timeout(Duration(seconds: ApiConfig.requestTimeoutSeconds));
+
+      return response.statusCode == 201;
+    } catch (e) {
+      debugPrint('⚠️ Error sending message: $e');
+      return false;
+    }
+  }
 }

@@ -7,6 +7,13 @@ import 'package:m2/screens/login_screen.dart';
 import 'package:m2/screens/main_screen.dart';
 import 'package:m2/screens/register_screen.dart';
 import 'package:m2/screens/profile_screen.dart';
+import 'package:m2/screens/contact_screen.dart';
+import 'package:m2/screens/suppliers_screen.dart';
+import 'package:m2/screens/rfq_screen.dart';
+import 'package:m2/screens/buyer_dashboard_screen.dart';
+import 'package:m2/screens/supplier_dashboard_screen.dart';
+import 'package:m2/screens/messages_screen.dart';
+import 'package:m2/screens/order_tracking_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,6 +68,13 @@ class MyApp extends StatelessWidget {
               '/register': (_) => const RegisterScreen(),
               '/profile': (_) => const ProfileScreen(),
               '/main': (_) => const MainScreen(),
+              '/contact': (_) => const ContactScreen(),
+              '/suppliers': (_) => const SuppliersScreen(),
+              '/rfq': (_) => const RfqScreen(),
+              '/buyer-dashboard': (_) => const BuyerDashboardScreen(),
+              '/supplier-dashboard': (_) => const SupplierDashboardScreen(),
+              '/messages': (_) => const MessagesScreen(),
+              '/orders': (_) => const OrderTrackingScreen(),
             },
           );
         },

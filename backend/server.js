@@ -12,6 +12,11 @@ import productRoutes from './routes/products.js';
 import commentRoutes from './routes/comments.js';
 import complaintRoutes from './routes/complaints.js';
 import userRoutes from './routes/user.js';
+import contactRoutes from './routes/contact.js';
+import rfqRoutes from './routes/rfqs.js';
+import supplierRoutes from './routes/suppliers.js';
+import messageRoutes from './routes/messages.js';
+import orderRoutes from './routes/orders.js';
 
 const app = express();
 
@@ -57,6 +62,11 @@ app.use('/api/products', productRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/rfqs', rfqRoutes);
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

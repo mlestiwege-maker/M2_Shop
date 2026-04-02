@@ -42,6 +42,11 @@ class ApiConfig {
   static String get commentsEndpoint => '$baseUrl/comments';
   static String get complaintsEndpoint => '$baseUrl/complaints';
   static String get userEndpoint => '$baseUrl/user';
+  static String get contactEndpoint => '$baseUrl/contact';
+  static String get rfqEndpoint => '$baseUrl/rfqs';
+  static String get suppliersEndpoint => '$baseUrl/suppliers';
+  static String get messagesEndpoint => '$baseUrl/messages';
+  static String get ordersEndpoint => '$baseUrl/orders';
 
   /// File upload endpoint for images
   static String get uploadEndpoint => '$baseUrl/upload';
