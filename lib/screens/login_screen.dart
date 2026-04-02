@@ -105,6 +105,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 128,
                               width: double.infinity,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  height: 128,
+                                  width: double.infinity,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [Color(0xFF374151), Color(0xFF111827)],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             Container(
                               height: 128,

@@ -20,11 +20,14 @@ class Product {
   /// Create Product object from JSON (API → App)
   factory Product.fromJson(Map<String, dynamic> json) {
     final rawImageUrl = json['imageUrl']?.toString() ?? '';
-    final bool isFullUrl = rawImageUrl.startsWith('http');
+    final bool hasImage = rawImageUrl.isNotEmpty && rawImageUrl != 'null';
+    final bool isFullUrl = rawImageUrl.startsWith('http://') || rawImageUrl.startsWith('https://');
 
-    final imageUrl = isFullUrl
-        ? rawImageUrl
-      : '${ApiConfig.imageBaseUrl}/$rawImageUrl';
+    final imageUrl = !hasImage
+        ? ''
+        : isFullUrl
+            ? rawImageUrl
+            : '${ApiConfig.imageBaseUrl}/$rawImageUrl';
 
     // Convert _id to int (if it's not an int, fallback to 0)
     int parsedId = 0;

@@ -9,8 +9,8 @@ const seedProducts = async () => {
     await Product.deleteMany();
 
     await Product.insertMany([
-      { name: 'Laptop', price: 1200, category: 'Electronics', description: 'A fast laptop', imageUrl: null },
-      { name: 'Phone', price: 800, category: 'Electronics', description: 'A modern smartphone', imageUrl: null }
+      { name: 'Laptop', price: 1200, category: 'Electronics', description: 'A fast laptop', imageUrl: 'laptop.png' },
+      { name: 'Phone', price: 800, category: 'Electronics', description: 'A modern smartphone', imageUrl: 'phone.png' }
     ]);
 
     console.log('✅ Demo products added!');

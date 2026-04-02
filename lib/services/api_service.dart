@@ -42,9 +42,14 @@ class ApiService {
         // Map JSON to Product model, ensuring full image URLs
         final products = data.map((item) {
           final rawImageUrl = item['imageUrl']?.toString() ?? '';
-          final imageUrl = rawImageUrl.isNotEmpty
-              ? '${ApiConfig.imageBaseUrl}/$rawImageUrl'
-              : 'https://via.placeholder.com/150?text=No+Image';
+          final hasImage = rawImageUrl.isNotEmpty && rawImageUrl != 'null';
+          final isFullUrl = rawImageUrl.startsWith('http://') || rawImageUrl.startsWith('https://');
+
+          final imageUrl = !hasImage
+              ? ''
+              : isFullUrl
+                  ? rawImageUrl
+                  : '${ApiConfig.imageBaseUrl}/$rawImageUrl';
 
           return Product.fromJson({...item, 'imageUrl': imageUrl});
         }).toList();
