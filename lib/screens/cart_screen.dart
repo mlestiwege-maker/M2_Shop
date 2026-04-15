@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:m2/providers/cart_provider.dart';
+import 'package:m2/utils/category_image_resolver.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -23,7 +25,25 @@ class CartScreen extends StatelessWidget {
                     final quantity = item['quantity'];
 
                     return ListTile(
-                      leading: Image.network(product.imageUrl),
+                      leading: product.imageUrl.isEmpty
+                          ? SvgPicture.asset(
+                              CategoryImageResolver.byCategoryAsset(product.category),
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              product.imageUrl,
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => SvgPicture.asset(
+                                CategoryImageResolver.byCategoryAsset(product.category),
+                                width: 48,
+                                height: 48,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                       title: Text(product.name),
                       subtitle: Text('\$${product.price.toStringAsFixed(2)} x $quantity'),
                       trailing: IconButton(

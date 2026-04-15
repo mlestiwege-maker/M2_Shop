@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../models/product.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
+import '../utils/category_image_resolver.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -38,7 +40,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   bottomLeft: Radius.circular(16),
                   bottomRight: Radius.circular(16),
                 ),
-                child: Image.network(widget.product.imageUrl, height: 300, fit: BoxFit.cover),
+                child: widget.product.imageUrl.isEmpty
+                    ? SvgPicture.asset(
+                        CategoryImageResolver.byCategoryAsset(widget.product.category),
+                        height: 300,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.network(
+                        widget.product.imageUrl,
+                        height: 300,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => SvgPicture.asset(
+                          CategoryImageResolver.byCategoryAsset(widget.product.category),
+                          height: 300,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 20),

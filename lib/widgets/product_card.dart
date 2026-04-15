@@ -1,50 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart'; 
 import '../providers/cart_provider.dart';
 import '../screens/product_detail_screen.dart';
+import '../utils/category_image_resolver.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
 
   const ProductCard({super.key, required this.product});
 
-  IconData _categoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'electronics':
-        return Icons.devices_rounded;
-      case 'clothing':
-        return Icons.checkroom_rounded;
-      case 'books':
-        return Icons.menu_book_rounded;
-      case 'toys':
-        return Icons.toys_rounded;
-      default:
-        return Icons.inventory_2_rounded;
-    }
-  }
-
   Widget _imageFallback() {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF312E81), Color(0xFF111827)],
-        ),
-      ),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(_categoryIcon(product.category), size: 42, color: Colors.white70),
-          const SizedBox(height: 8),
-          const Text(
-            'Image unavailable',
-            style: TextStyle(color: Colors.white70, fontSize: 12),
-          ),
-        ],
-      ),
+    return SvgPicture.asset(
+      CategoryImageResolver.byCategoryAsset(product.category),
+      fit: BoxFit.cover,
     );
   }
 

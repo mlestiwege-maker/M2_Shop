@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../models/product.dart';
 import '../services/api_service.dart';
 import 'product_detail_screen.dart';
+import '../utils/category_image_resolver.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -89,26 +91,31 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             topLeft: Radius.circular(16),
                             topRight: Radius.circular(16),
                           ),
-                          child: Image.network(
-                            product.imageUrl,
-                            fit: BoxFit.cover,
-                            // Show a loading spinner while the image loads
-                            loadingBuilder: (context, child, progress) {
-                              if (progress == null) return child;
-                              return const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.deepPurpleAccent,
+                          child: product.imageUrl.isEmpty
+                              ? SvgPicture.asset(
+                                  CategoryImageResolver.byCategoryAsset(product.category),
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  product.imageUrl,
+                                  fit: BoxFit.cover,
+                                  // Show a loading spinner while the image loads
+                                  loadingBuilder: (context, child, progress) {
+                                    if (progress == null) return child;
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                    );
+                                  },
+                                  // Fallback if network image fails
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return SvgPicture.asset(
+                                      CategoryImageResolver.byCategoryAsset(product.category),
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                            // Fallback if network image fails
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                'assets/images/placeholder.png',
-                                fit: BoxFit.cover,
-                              );
-                            },
-                          ),
                         ),
                       ),
 

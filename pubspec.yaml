@@ -23,6 +23,9 @@ dependencies:
   # Local Storage
   shared_preferences: ^2.1.1
 
+  # SVG rendering for local category fallback images
+  flutter_svg: ^2.0.17
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

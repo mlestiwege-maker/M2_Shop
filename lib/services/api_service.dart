@@ -39,20 +39,8 @@ class ApiService {
 
         debugPrint('✅ Fetched ${data.length} products');
 
-        // Map JSON to Product model, ensuring full image URLs
-        final products = data.map((item) {
-          final rawImageUrl = item['imageUrl']?.toString() ?? '';
-          final hasImage = rawImageUrl.isNotEmpty && rawImageUrl != 'null';
-          final isFullUrl = rawImageUrl.startsWith('http://') || rawImageUrl.startsWith('https://');
-
-          final imageUrl = !hasImage
-              ? ''
-              : isFullUrl
-                  ? rawImageUrl
-                  : '${ApiConfig.imageBaseUrl}/$rawImageUrl';
-
-          return Product.fromJson({...item, 'imageUrl': imageUrl});
-        }).toList();
+        // Map JSON to Product model (includes category-based image fallback)
+        final products = data.map((item) => Product.fromJson(item)).toList();
 
         return products;
       } else if (response.statusCode == 404) {

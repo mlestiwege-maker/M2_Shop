@@ -1,4 +1,4 @@
-import '../config/api_config.dart';
+import '../utils/category_image_resolver.dart';
 
 class Product {
   final int id;
@@ -19,15 +19,11 @@ class Product {
 
   /// Create Product object from JSON (API → App)
   factory Product.fromJson(Map<String, dynamic> json) {
-    final rawImageUrl = json['imageUrl']?.toString() ?? '';
-    final bool hasImage = rawImageUrl.isNotEmpty && rawImageUrl != 'null';
-    final bool isFullUrl = rawImageUrl.startsWith('http://') || rawImageUrl.startsWith('https://');
-
-    final imageUrl = !hasImage
-        ? ''
-        : isFullUrl
-            ? rawImageUrl
-            : '${ApiConfig.imageBaseUrl}/$rawImageUrl';
+    final category = json['category']?.toString() ?? 'General';
+    final imageUrl = CategoryImageResolver.resolveProductImage(
+      rawImageUrl: json['imageUrl']?.toString(),
+      category: category,
+    );
 
     // Convert _id to int (if it's not an int, fallback to 0)
     int parsedId = 0;
@@ -45,7 +41,7 @@ class Product {
           ? (json['price'] as num).toDouble()
           : double.tryParse('${json['price']}') ?? 0.0,
       imageUrl: imageUrl,
-      category: json['category']?.toString() ?? 'General',
+      category: category,
     );
   }
 
